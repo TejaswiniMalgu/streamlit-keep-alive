@@ -1,0 +1,26 @@
+name: Keep Streamlit Apps Awake
+
+on:
+  schedule:
+    - cron: "*/25 * * * *"  # runs every 25 minutes
+  workflow_dispatch:          # allows manual trigger from GitHub
+
+jobs:
+  ping-apps:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping Research Assistant
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://research-assistant-travily-mistral.streamlit.app/)
+          echo "Research Assistant status: $STATUS"
+
+      - name: Ping PDF RAG Assistant
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://pdf-rag-assistant.streamlit.app/)
+          echo "PDF RAG Assistant status: $STATUS"
+
+      - name: Ping Mistral Personality Chatbot
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://mistral-personality-chatbot.streamlit.app/)
+          echo "Mistral Chatbot status: $STATUS"
